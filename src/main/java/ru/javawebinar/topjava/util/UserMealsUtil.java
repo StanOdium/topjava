@@ -3,11 +3,11 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
@@ -28,8 +28,34 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO return filtered list with excess. Implement by cycles
-        return null;
+        if (meals == null || meals.isEmpty())
+            return null;
+
+        Map<LocalDate, Integer> caloriesPerDayMap = new HashMap<>();
+        List<UserMeal> filteredList = new ArrayList<>();
+        List<UserMealWithExcess> filteredListWithExcess = new ArrayList<>();
+
+        for (UserMeal nextMeal : meals) {
+            LocalDate localDate = nextMeal.getDateTime().toLocalDate();
+
+            if (caloriesPerDayMap.isEmpty() || !caloriesPerDayMap.containsKey(localDate)) {
+                int caloriesSum = nextMeal.getCalories();
+                caloriesPerDayMap.put(localDate, caloriesSum);
+            } else {
+                caloriesPerDayMap.compute(localDate, (date, cals) -> cals += nextMeal.getCalories());
+            }
+
+            if (TimeUtil.isBetweenHalfOpen(nextMeal.getDateTime().toLocalTime(), startTime, endTime)) {
+                filteredList.add(nextMeal);
+            }
+        }
+
+        for (UserMeal meal : filteredList) {
+            filteredListWithExcess.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(),
+                    caloriesPerDayMap.get(meal.getDateTime().toLocalDate()) > caloriesPerDay));
+        }
+
+        return filteredListWithExcess;
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
