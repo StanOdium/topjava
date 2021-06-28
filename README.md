@@ -1,5 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9ae6cc775eff437083d83095cd770cd7)](https://www.codacy.com/gh/StanOdium/topjava/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=StanOdium/topjava&amp;utm_campaign=Badge_Grade)
-https://travis-ci.com/StanOdium/topjava.svg?branch=master
+[![Build Status](https://api.travis-ci.com/StanOdium/topjava.svg?branch=master)](https://travis-ci.com/StanOdium/topjava)
 
 Java Enterprise Online Project 
 ===============================
